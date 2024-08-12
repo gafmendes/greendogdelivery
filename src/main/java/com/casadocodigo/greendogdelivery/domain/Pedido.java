@@ -1,7 +1,8 @@
 package com.casadocodigo.greendogdelivery.domain;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
@@ -34,5 +35,80 @@ public class Pedido {
 	
 	@Min(1)
 	private Double valorTotal;
+
+	public Pedido() {
+		
+	}
+	
+	
+	public Pedido(Long id, Cliente cliente, List<Item> itens, Double valorTotal) {
+		super();
+		this.id = id;
+		this.cliente = cliente;
+		this.itens = itens;
+		this.data = new Date();
+		this.valorTotal = valorTotal;
+	}
+
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public Cliente getCliente() {
+		return cliente;
+	}
+
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
+	}
+
+	public List<Item> getItens() {
+		return itens;
+	}
+
+	public void setItens(List<Item> itens) {
+		this.itens = itens;
+	}
+
+	public Date getData() {
+		return data;
+	}
+
+	public void setData(Date data) {
+		this.data = data;
+	}
+
+	public Double getValorTotal() {
+		return valorTotal;
+	}
+
+	public void setValorTotal(Double valorTotal) {
+		this.valorTotal = valorTotal;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Pedido pedido = (Pedido) o;
+		return Objects.equals(id, pedido.id);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
+
+	@Override
+	public String toString() {
+		return "Pedido [id=" + id + ", cliente=" + cliente + ", itens=" + itens + ", data=" + data + ", valorTotal="
+				+ valorTotal + "]";
+	}
+
 
 }
