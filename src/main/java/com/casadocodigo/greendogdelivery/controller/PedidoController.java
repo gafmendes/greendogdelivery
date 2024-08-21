@@ -34,40 +34,37 @@ public class PedidoController {
 	private final AtualizaEstoque atualizaEstoque;
 	private final String ITEM_URI = "pedidos/";
 
-	public PedidoController(PedidoRepository pedidoRepository, ItemRepository itemRepository,
-			ClienteRepository clienteRepository, AtualizaEstoque atualizaEstoque) {
+	public PedidoController(PedidoRepository pedidoRepository, ItemRepository itemRepository, ClienteRepository clienteRepository, AtualizaEstoque atualizaEstoque) {
 		this.pedidoRepository = pedidoRepository;
 		this.itemRepository = itemRepository;
 		this.clienteRepository = clienteRepository;
-		this.atualizaEstoque = atualizaEstoque;
-	}
+        this.atualizaEstoque = atualizaEstoque;
+    }
 
 	@GetMapping("/")
 	public ModelAndView list() {
 		var pedidos = this.pedidoRepository.findAll();
-		return new ModelAndView(ITEM_URI + "list", "pedidos", pedidos);
+		return new ModelAndView(ITEM_URI + "list","pedidos",pedidos);
 	}
 
 	@GetMapping("{id}")
 	public ModelAndView view(@PathVariable("id") Pedido pedido) {
-		return new ModelAndView(ITEM_URI + "view", "pedido", pedido);
+		return new ModelAndView(ITEM_URI + "view","pedido",pedido);
 	}
 
 	@GetMapping("/novo")
 	public ModelAndView createForm(@ModelAttribute Pedido pedido) {
 
-		var model = new HashMap<String, Object>();
-		model.put("todosItens", itemRepository.findAll());
-		model.put("todosClientes", clienteRepository.findAll());
-		return new ModelAndView(ITEM_URI + "form", model);
+		var model = new HashMap<String,Object>();
+		model.put("todosItens",itemRepository.findAll());
+		model.put("todosClientes",clienteRepository.findAll());
+		return new ModelAndView(ITEM_URI + "form",model);
 
 	}
 
 	@PostMapping(value = "/", params = "form")
-	public ModelAndView create(@Valid Pedido pedido, BindingResult result, RedirectAttributes redirect) {
-		if (result.hasErrors()) {
-			return new ModelAndView(ITEM_URI + "form", "formErrors", result.getAllErrors());
-		}
+	public ModelAndView create(@Valid Pedido pedido,BindingResult result,RedirectAttributes redirect) {
+		if (result.hasErrors()) { return new ModelAndView(ITEM_URI + "form","formErrors",result.getAllErrors()); }
 
 		if (pedido.getId() != null) {
 			Optional<Pedido> pedidoParaAlterarOpt = pedidoRepository.findById(pedido.getId());
@@ -105,12 +102,12 @@ public class PedidoController {
 				atualizaEstoque.processar(pedido);
 			}
 		}
-		redirect.addFlashAttribute("globalMessage", "Pedido gravado com sucesso");
-		return new ModelAndView("redirect:/" + ITEM_URI + "{pedido.id}", "pedido.id", pedido.getId());
+		redirect.addFlashAttribute("globalMessage","Pedido gravado com sucesso");
+		return new ModelAndView("redirect:/" + ITEM_URI + "{pedido.id}","pedido.id",pedido.getId());
 	}
 
 	@GetMapping(value = "remover/{id}")
-	public ModelAndView remover(@PathVariable("id") Long id, RedirectAttributes redirect) {
+	public ModelAndView remover(@PathVariable("id") Long id,RedirectAttributes redirect) {
 
 		Optional<Pedido> pedidoParaRemoverOpt = pedidoRepository.findById(id);
 		if (pedidoParaRemoverOpt.isPresent()) {
@@ -126,8 +123,8 @@ public class PedidoController {
 
 		var pedidos = this.pedidoRepository.findAll();
 
-		var mv = new ModelAndView(ITEM_URI + "list", "pedidos", pedidos);
-		mv.addObject("globalMessage", "Pedido removido com sucesso");
+		var mv = new ModelAndView(ITEM_URI + "list","pedidos",pedidos);
+		mv.addObject("globalMessage","Pedido removido com sucesso");
 
 		return mv;
 	}
@@ -135,11 +132,12 @@ public class PedidoController {
 	@GetMapping(value = "alterar/{id}")
 	public ModelAndView alterarForm(@PathVariable("id") Pedido pedido) {
 
-		var model = new HashMap<String, Object>();
-		model.put("todosItens", itemRepository.findAll());
-		model.put("todosClientes", clienteRepository.findAll());
-		model.put("pedido", pedido);
+		var model = new HashMap<String,Object>();
+		model.put("todosItens",itemRepository.findAll());
+		model.put("todosClientes",clienteRepository.findAll());
+		model.put("pedido",pedido);
 
-		return new ModelAndView(ITEM_URI + "form", model);
+		return new ModelAndView(ITEM_URI + "form",model);
 	}
+
 }

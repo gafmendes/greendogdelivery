@@ -18,30 +18,30 @@ import jakarta.validation.Valid;
 @Controller
 @RequestMapping("/itens")
 public class ItemController {
-	
+
 	private final ItemRepository itemRepository;
 	private final String ITEM_URI = "itens/";
-	
+
 	public ItemController(ItemRepository itemRepository) {
 		this.itemRepository = itemRepository;
 	}
-	
+
 	@GetMapping("/")
 	public ModelAndView list() {
 		Iterable<Item> itens = this.itemRepository.findAll();
 		return new ModelAndView(ITEM_URI + "list","itens",itens);
 	}
-	
+
 	@GetMapping("{id}")
 	public ModelAndView view(@PathVariable("id") Item item) {
 		return new ModelAndView(ITEM_URI + "view","item",item);
 	}
-	
+
 	@GetMapping("/novo")
 	public String createForm(@ModelAttribute Item item) {
 		return ITEM_URI + "form";
 	}
-	
+
 	@PostMapping(params = "form")
 	public ModelAndView create(@Valid Item item, BindingResult result, RedirectAttributes redirect) {
 		if (result.hasErrors()) { return new ModelAndView(ITEM_URI + "form","formErrors",result.getAllErrors()); }
@@ -49,7 +49,7 @@ public class ItemController {
 		redirect.addFlashAttribute("globalMessage","Item gravado com sucesso");
 		return new ModelAndView("redirect:/" + ITEM_URI + "{item.id}","item.id",item.getId());
 	}
-	
+
 	@GetMapping(value = "remover/{id}")
 	public ModelAndView remover(@PathVariable("id") Long id,RedirectAttributes redirect) {
 		this.itemRepository.deleteById(id);
@@ -60,7 +60,7 @@ public class ItemController {
 
 		return mv;
 	}
-	
+
 	@GetMapping(value = "alterar/{id}")
 	public ModelAndView alterarForm(@PathVariable("id") Item item) {
 		return new ModelAndView(ITEM_URI + "form","item",item);

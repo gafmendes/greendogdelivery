@@ -35,7 +35,7 @@ public class NovoPedidoController {
 	public RespostaDTO novo(@PathVariable("clienteId") Long clienteId,
 			@PathVariable("listaDeItens") String listaDeItens) {
 
-		ar dto = new RespostaDTO();
+		var dto = new RespostaDTO();
 
 		try {
 			var clienteOpt = clienteRepository.findById(clienteId);
