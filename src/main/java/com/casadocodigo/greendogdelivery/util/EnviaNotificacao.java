@@ -11,20 +11,23 @@ import com.casadocodigo.greendogdelivery.domain.Pedido;
 
 @Component
 public class EnviaNotificacao {
-	
-	@Autowired
-	Notificacao  notificacao;
+
+	private final Notificacao notificacao;
 
 	Logger logger = LoggerFactory.getLogger(EnviaNotificacao.class.getSimpleName());
 
-	public void enviaEmail(Cliente cliente,Pedido pedido) {
+	public EnviaNotificacao(Notificacao notificacao) {
+		this.notificacao = notificacao;
+	}
 
-		logger.info("Enviar notificacao para "+ cliente.getNome() + " - pedido $"+pedido.getValorTotal());
+	public void enviaEmail(Cliente cliente, Pedido pedido) {
+
+		logger.info("Enviar notificacao para " + cliente.getNome() + " - pedido $" + pedido.getValorTotal());
 
 		if (notificacao.envioAtivo()) {
 
 			/*
-			     codigo de envio
+			 * codigo de envio
 			 */
 
 			logger.info("Notificacao enviada!");
@@ -35,7 +38,4 @@ public class EnviaNotificacao {
 
 		}
 	}
-
-
 }
-
